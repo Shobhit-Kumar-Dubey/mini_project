@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Loan EMI Calculator — Decorated</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --muted:#9fb0c8;
+    --text:#eaf6fb;
+    --accent-start:#6ee7ff;
+    --accent-mid:#7c4dff;
+    --card-bg: rgba(5,8,12,0.72);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:'Inter',system-ui,Arial;background:linear-gradient(180deg,#071029,#041028);color:var(--text);-webkit-font-smoothing:antialiased}
+
+/* =========================
+   Decorative floating images
+   ========================= */
+  /* decorative AI images — visible but clean */
+/* ===== refined decorative images (paste -> replace previous .bg-decor block) ===== */
+/* 🎨 Final balanced AI decorative layout */
+.bg-decor{
+  position: fixed;
+  z-index: 0;               
+  pointer-events: none;
+  opacity: 0.22;             
+  filter: blur(1px) brightness(1.05) saturate(0.95);
+  transition: transform 8s ease, opacity 0.8s ease;
+  animation: floatDecor 22s ease-in-out infinite;
+  mix-blend-mode: screen;
+  will-change: transform, opacity;
+}
+
+/* soft floating animation */
+@keyframes floatDecor{
+  0%{ transform: translateY(0) scale(1); }
+  50%{ transform: translateY(-10px) scale(1.02); }
+  100%{ transform: translateY(0) scale(1); }
+}
+
+/* TOP-RIGHT (calc hero) */
+.decor-top-right{
+  top: 2%;
+  right: -4%;
+  width: 40vw;
+  max-width: 680px;
+  transform: translate(8%,-8%) scale(1.03);
+  opacity: 0.25;
+  filter: blur(0.8px) brightness(1.1);
+}
+
+/* BOTTOM-LEFT (finance coins) */
+.decor-bottom-left{
+  bottom: -2%;
+  left: -8%;
+  width: 32vw;
+  max-width: 520px;
+  transform: translate(-6%,6%) scale(1.04);
+  opacity: 0.20;
+}
+
+/* LEFT-SIDE (AI brain) */
+.decor-side{
+  top: 8%;
+  left: 2%;
+  width: 28vw;
+  max-width: 400px;
+  opacity: 0.18;
+  filter: blur(0.5px) brightness(1);
+}
+
+/* CENTER (graph overlay) */
+.decor-center{
+  top: 40%;
+  left: 25%;
+  width: 42vw;
+  max-width: 660px;
+  opacity: 0.14;
+  filter: blur(2.4px) brightness(0.9);
+}
+/* ensure cards stay on top */
+main.container{ position: relative; z-index: 2; }
+.card{ position: relative; z-index: 3; }
+
+/* hide decorations on small screens */
+@media (max-width:900px){
+  .bg-decor{ display:none; }
+}
+
+
+/* ===================
+   Main page / cards
+   =================== */
+  .container{max-width:1100px;margin:36px auto;padding:24px;display:grid;grid-template-columns:1fr 420px;gap:24px;position:relative;z-index:1}
+  .card{
+    background: var(--card-bg);
+    border-radius:14px;padding:22px;border:1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 8px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    backdrop-filter: blur(8px) saturate(120%);
+    position:relative;
+    z-index:1; /* ensure cards are above decorative images */
+  }
+
+  header h1{margin:0;font-size:20px;font-weight:700;letter-spacing:-0.2px}
+  header p{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+  .controls{display:flex;flex-direction:column;gap:14px;margin-top:12px}
+  .field{display:flex;flex-direction:column;gap:8px}
+  label{font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+  input[type="number"], select, button{
+    background:rgba(0,0,0,0.28);border:1px solid rgba(255,255,255,0.06);padding:12px;border-radius:10px;color:var(--text);outline:none;font-size:15px;
+  }
+  .row{display:flex;gap:12px}
+  .row .col{flex:1}
+  .hint{font-size:12px;color:var(--muted)}
+
+  .btns{display:flex;gap:10px;align-items:center}
+  button.primary{
+    background:linear-gradient(90deg,var(--accent-start),var(--accent-mid));
+    border:none;padding:10px 14px;border-radius:10px;color:#012;font-weight:800;cursor:pointer;letter-spacing:0.3px;
+    box-shadow:0 6px 18px rgba(124,77,255,0.10), 0 2px 6px rgba(0,198,167,0.04);
+  }
+  button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 12px;border-radius:10px;color:var(--muted);cursor:pointer}
+
+  .result-hero{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+  .muted{color:var(--muted);font-size:13px}
+  .result-value{font-size:34px;font-weight:800;letter-spacing:-0.6px;color:var(--text)}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px;width:100%}
+  .stat{background:rgba(255,255,255,0.02);padding:12px;border-radius:10px;text-align:center}
+  .stat small{display:block;color:var(--muted);font-size:12px}
+  .stat strong{display:block;margin-top:6px;font-size:16px}
+
+  .amort{margin-top:12px;max-height:260px;overflow:auto;border-radius:8px;border:1px solid rgba(255,255,255,0.03)}
+  table{width:100%;border-collapse:collapse;color:var(--muted);font-size:13px}
+  th,td{padding:8px;border-bottom:1px dashed rgba(255,255,255,0.03);text-align:right}
+  th{background:rgba(255,255,255,0.01);position:sticky;top:0;color:var(--muted);font-weight:600}
+  th:first-child, td:first-child{text-align:left;padding-left:12px}
+
+  /* responsive */
+  @media (max-width:900px){
+    .bg-decor{ display:none; } /* hide decorative images on small screens */
+    .container{grid-template-columns:1fr;padding:18px;gap:16px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .result-value{font-size:26px}
+  }
+</style>
+</head>
+<body>
+
+<!-- decorative AI-themed images (place above <main>) -->
+<img src="./calc-hero.png" class="bg-decor decor-top-right" alt="" aria-hidden="true">
+<img src="./loan-finance.png" class="bg-decor decor-bottom-left" alt="" aria-hidden="true">
+<img src="./ai-brain.png" class="bg-decor decor-side" alt="" aria-hidden="true">
+<img src="./graph-overlay.png" class="bg-decor decor-center" alt="" aria-hidden="true">
+
+<main class="container">
+  <!-- left: inputs -->
+  <section class="card" aria-labelledby="calcTitle">
+    <header id="calcTitle">
+      <div style="display:flex;gap:12px;align-items:center">
+        <div style="display:inline-block;background:linear-gradient(90deg,#6ee7ff,#7c4dff);color:#012;padding:6px 10px;border-radius:999px;font-weight:700">EMI</div>
+        <div>
+          <h1>Loan EMI Calculator</h1>
+          <p class="muted">Interactive demo • HTML • CSS • JavaScript</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="controls" role="form" aria-label="EMI input form">
+      <div class="field">
+        <label for="principal">Loan Amount (₹)</label>
+        <input id="principal" type="number" min="0" step="100" placeholder="e.g. 500000" />
+      </div>
+
+      <div class="row">
+        <div class="col field">
+          <label for="rate">Annual Interest Rate (%)</label>
+          <input id="rate" type="number" min="0" step="0.01" placeholder="e.g. 8.5" />
+        </div>
+        <div class="col field">
+          <label for="tenure">Tenure</label>
+          <div style="display:flex;gap:8px">
+            <input id="tenure" type="number" min="1" step="1" placeholder="Years e.g. 5" style="flex:1" />
+            <select id="tenureUnit" aria-label="tenure unit" style="width:120px">
+              <option value="years">Years</option>
+              <option value="months">Months</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="hint">Tip: use Years for standard loans; choose Months for exact month counts.</div>
+
+      <div class="btns">
+        <button class="primary" id="calcBtn">Calculate EMI</button>
+        <button class="ghost" id="clearBtn">Reset</button>
+        <label style="margin-left:auto;display:flex;gap:8px;align-items:center">
+          <input id="showAmort" type="checkbox" /> <span class="muted">Show amortization</span>
+        </label>
+      </div>
+
+      <div id="error" class="muted" style="color:#ff9b9b;display:none"></div>
+    </div>
+  </section>
+
+  <!-- right: result -->
+  <aside class="card" aria-live="polite">
+    <div class="result-hero">
+      <div class="muted">Result</div>
+      <div id="emiValue" class="result-value">—</div>
+      <div class="muted">Estimated Monthly EMI</div>
+
+      <div class="stats" id="summaryStats">
+        <div class="stat">
+          <small>Total Payment</small>
+          <strong id="totalPay">—</strong>
+        </div>
+        <div class="stat">
+          <small>Total Interest</small>
+          <strong id="totalInterest">—</strong>
+        </div>
+        <div class="stat">
+          <small>Tenure (months)</small>
+          <strong id="monthsCount">—</strong>
+        </div>
+      </div>
+
+      <div id="amortBlock" style="display:none">
+        <div style="margin-top:12px;font-weight:600;color:var(--muted)">Amortization Schedule</div>
+        <div class="amort" role="region" aria-label="amortization schedule">
+          <table id="amortTable">
+            <thead>
+              <tr><th>Month</th><th>EMI</th><th>Principal</th><th>Interest</th><th>Balance</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="margin-top:12px" class="muted">Tip: Use this UI screenshot in your PPT instead of full code during demo.</div>
+    </div>
+  </aside>
+</main>
+
+<script>
+  // DOM helpers
+  const $ = id => document.getElementById(id);
+  const calcBtn = $('calcBtn'), clearBtn = $('clearBtn'), showAmort = $('showAmort');
+  const emiValue = $('emiValue'), totalPay = $('totalPay'), totalInterest = $('totalInterest'), monthsCount = $('monthsCount');
+  const amortBlock = $('amortBlock'), amortTableBody = document.querySelector('#amortTable tbody');
+  const errorDiv = $('error');
+
+  function formatINR(x){ return '₹' + Number(x).toLocaleString('en-IN'); }
+
+  function calculateEMI(P, annualRate, months){
+    if (annualRate === 0) {
+      const emi = P / months;
+      return {emi, totalPayment: P, totalInterest: 0};
+    }
+    const R = annualRate / 12 / 100;
+    const N = months;
+    const x = Math.pow(1 + R, N);
+    const emi = (P * R * x) / (x - 1);
+    const totalPayment = emi * N;
+    const totalInterest = totalPayment - P;
+    return {emi, totalPayment, totalInterest};
+  }
+
+  function buildAmort(P, annualRate, months, emi){
+    const rows = [];
+    let balance = P;
+    const R = annualRate / 12 / 100;
+    for(let m=1;m<=months;m++){
+      const interest = balance * R;
+      const principal = Math.min(emi - interest, balance);
+      balance = Math.max(0, (balance - principal));
+      rows.push({month:m, emi:emi, principal:principal, interest:interest, balance:balance});
+      if (balance <= 0) break;
+    }
+    return rows;
+  }
+
+  function validateInputs(P, rateInput, tenureInput, unit){
+    if (!P || P <= 0) return "Enter a valid loan amount.";
+    if (rateInput === '' || rateInput < 0) return "Enter a valid interest rate.";
+    if (!tenureInput || tenureInput <= 0) return "Enter a valid tenure.";
+    if (!['years','months'].includes(unit)) return "Invalid tenure unit.";
+    return null;
+  }
+
+  calcBtn.addEventListener('click', ()=>{
+    errorDiv.style.display = 'none';
+    amortBlock.style.display = 'none';
+    amortTableBody.innerHTML = '';
+
+    const P = Number($('principal').value);
+    const rate = Number($('rate').value);
+    let tenure = Number($('tenure').value);
+    const unit = $('tenureUnit').value;
+    if (unit === 'years') tenure = tenure * 12;
+
+    const err = validateInputs(P, $('rate').value, $('tenure').value, unit);
+    if (err){
+      errorDiv.textContent = err; errorDiv.style.display = 'block'; return;
+    }
+
+    const {emi, totalPayment, totalInterest} = calculateEMI(P, rate, tenure);
+    const emiRounded = Number(emi.toFixed(2));
+    emiValue.textContent = formatINR(emiRounded);
+    totalPay.textContent = formatINR(totalPayment.toFixed(0));
+    totalInterest.textContent = formatINR(totalInterest.toFixed(0));
+    monthsCount.textContent = tenure;
+
+    if (showAmort.checked) {
+      const rows = buildAmort(P, rate, tenure, emiRounded);
+      amortTableBody.innerHTML = rows.map(r=>`
+        <tr>
+          <td>${r.month}</td>
+          <td style="text-align:right">${formatINR(r.emi.toFixed(2))}</td>
+          <td style="text-align:right">${formatINR(r.principal.toFixed(0))}</td>
+          <td style="text-align:right">${formatINR(r.interest.toFixed(0))}</td>
+          <td style="text-align:right">${formatINR(r.balance.toFixed(0))}</td>
+        </tr>
+      `).join('');
+      amortBlock.style.display = 'block';
+
+
+    }
+  });
+
+  clearBtn.addEventListener('click', ()=> {
+    $('principal').value=''; $('rate').value=''; $('tenure').value=''; $('tenureUnit').value='years';
+    emiValue.textContent = '—'; totalPay.textContent='—'; totalInterest.textContent='—'; monthsCount.textContent='—';
+    amortTableBody.innerHTML=''; amortBlock.style.display='none'; errorDiv.style.display='none';
+  });
+</script>
+</body>
+</html>
